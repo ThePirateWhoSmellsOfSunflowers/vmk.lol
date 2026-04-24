@@ -63,7 +63,7 @@
       "debug": "Via BIOS Chip (U49) SOIC8",
       "url": "https://x.com/lowercase_drm/status/1912783481546883149",
       "url_label": "@lowercase_drm",
-      "image": ""
+      "image": "./img/lenovo_t470.jpeg"
     },
     {
       "make": "Dell",
@@ -89,7 +89,7 @@
       "debug": "Yes",
       "url": "https://labs.withsecure.com/publications/sniff-there-leaks-my-bitlocker-key",
       "url_label": "WithSecure Labs",
-      "image": ""
+      "image": "./img/dell_latitude_e5470.png"
     },
     {
       "make": "Dell",
@@ -141,7 +141,7 @@
       "debug": "Via BIOS chip (UC2) WSON8",
       "url": "https://x.com/lowercase_drm/status/1971146615311433766",
       "url_label": "@lowercase_drm",
-      "image": ""
+      "image": "./img/Dell_Latitude_5420.jpeg"
     },
     {
       "make": "Dell",
@@ -193,7 +193,7 @@
       "debug": "BIOS + TPM under motherboard",
       "url": "https://x.com/lowercase_drm/status/2039814860821672092",
       "url_label": "@lowercase_drm",
-      "image": ""
+      "image": "./img/dell_PB16250.jpeg"
     },
     {
       "make": "Dell",
@@ -323,7 +323,7 @@
       "debug": "Via BIOS Chip",
       "url": "https://www.errno.fr/Bitlocker_TPM_and_PIN_privesc.html",
       "url_label": "@gquere blog",
-      "image": ""
+      "image": "./img/HP_ProBook_4_G1.jpg"
     },
     {
       "make": "Moxa",
