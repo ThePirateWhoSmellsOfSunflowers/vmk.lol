@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ .Site.Title }}</title>
+<meta name="description" content="{{ .Description }}">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+    font-size: 15px;
+    background: #fffde7;
+    background-image:
+      radial-gradient(circle at 10% 20%, #ffe0f0 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #e0f0ff 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, #e8ffe0 0%, transparent 60%);
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .header { text-align: center; margin-bottom: 28px; }
+
+  .header h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    color: #c0392b;
+    text-shadow: 4px 4px 0 #f39c12, 6px 6px 0 rgba(231,76,60,0.2);
+    display: inline-block;
+    margin-bottom: 8px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%,100% { transform: rotate(-1.5deg); }
+    50%      { transform: rotate(1deg); }
+  }
+
+  .header .subtitle {
+    font-size: 15px;
+    color: #555;
+    background: #fff9c4;
+    border: 3px dashed #f39c12;
+    display: inline-block;
+    padding: 6px 18px;
+    transform: rotate(0.5deg);
+    margin-top: 8px;
+  }
+
+  .controls {
+    background: white;
+    border: 3px solid #333;
+    box-shadow: 6px 6px 0 #333;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .controls input[type="search"] {
+    font-family: inherit;
+    font-size: 15px;
+    border: 3px solid #333;
+    padding: 6px 12px;
+    outline: none;
+    background: #fff9c4;
+    width: 220px;
+    box-shadow: 3px 3px 0 #333;
+  }
+  .controls input[type="search"]:focus { background: #fff; }
+
+  .fun-btn {
+    font-family: inherit;
+    font-size: 14px;
+    border: 3px solid #333;
+    padding: 5px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 3px 3px 0 #333;
+    transition: transform 0.1s, box-shadow 0.1s;
+    background: #eee;
+  }
+  .fun-btn:hover  { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #333; }
+  .fun-btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 #333; }
+  .fun-btn.active-spi { background: #b3e5fc; border-color: #0277bd; color: #0277bd; }
+  .fun-btn.active-lpc { background: #ffe0b2; border-color: #e65100; color: #e65100; }
+  .fun-btn.active-v12 { background: #f3e5f5; border-color: #7b1fa2; color: #7b1fa2; }
+  .fun-btn.active-v20 { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+
+  .counter {
+    margin-left: auto;
+    font-size: 14px;
+    background: #c8e6c9;
+    border: 3px solid #333;
+    padding: 4px 12px;
+    box-shadow: 3px 3px 0 #333;
+    white-space: nowrap;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 3px solid #333;
+    box-shadow: 8px 8px 0 #333;
+    background: white;
+    margin-bottom: 28px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { background: #333; color: white; }
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.1s;
+  }
+  thead th:hover { background: #555; }
+  thead th.asc::after  { content: ' ↑'; }
+  thead th.desc::after { content: ' ↓'; }
+
+  tbody tr {
+    border-bottom: 2px dashed #ddd;
+    transition: background 0.1s;
+    animation: popIn 0.25s ease both;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  tbody tr:nth-child(even) { background: #fafff7; }
+  tbody tr:hover { background: #fff9c4 !important; }
+
+  .photo-link {
+    font-size: 13px;
+    font-weight: bold;
+    color: #1565c0;
+    white-space: nowrap;
+  }
+  .photo-link:hover { color: #c0392b; }
+  .photo-none { color: #ccc; font-size: 14px; }
+  td { padding: 9px 12px; vertical-align: middle; }
+  td.make-col { font-weight: bold; font-size: 15px; }
+  td.chip-col { font-size: 13px; color: #555; max-width: 140px; word-break: break-all; }
+  td.loc-col, td.dbg-col { font-size: 13px; color: #444; max-width: 180px; }
+
+  .tag { display: inline-block; padding: 2px 9px; font-size: 13px; font-weight: bold; border: 2.5px solid; }
+  .tag-spi  { background: #b3e5fc; border-color: #0277bd; color: #0277bd; }
+  .tag-lpc  { background: #ffe0b2; border-color: #e65100; color: #e65100; }
+  .tag-12   { background: #f3e5f5; border-color: #7b1fa2; color: #7b1fa2; }
+  .tag-20   { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+  .tag-both { background: #fff9c4; border-color: #f9a825; color: #f57f17; }
+  .tag-yes  { background: #c8e6c9; border-color: #2e7d32; color: #1b5e20; }
+
+  a.ref { color: #1565c0; font-size: 13px; text-decoration: underline wavy; }
+  a.ref:hover { color: #c0392b; }
+  tr.hidden { display: none; }
+
+  /* modals */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fffde7;
+    border: 4px solid #333;
+    box-shadow: 10px 10px 0 #c0392b;
+    max-width: 520px;
+    width: 100%;
+    animation: modalPop 0.2s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes modalPop {
+    from { transform: scale(0.8) rotate(-2deg); opacity: 0; }
+    to   { transform: scale(1)   rotate(0deg);  opacity: 1; }
+  }
+  .modal-header {
+    background: #333;
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .modal-header h3 { font-size: 18px; line-height: 1.2; }
+  .modal-close {
+    font-family: inherit;
+    font-size: 20px;
+    background: #c0392b;
+    color: white;
+    border: 3px solid white;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.1s;
+  }
+  .modal-close:hover { transform: rotate(15deg) scale(1.1); }
+  .modal-body { padding: 22px 24px; }
+  .photo-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: repeating-linear-gradient(45deg,#e8e8e8,#e8e8e8 10px,#f4f4f4 10px,#f4f4f4 20px);
+    border: 3px dashed #bbb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #aaa;
+  }
+  .photo-placeholder .ph-icon  { font-size: 40px; line-height: 1; }
+  .photo-placeholder .ph-label { font-size: 12px; letter-spacing: 0.05em; }
+  .modal-nav { display: flex; gap: 8px; }
+  .modal-nav button {
+    font-family: inherit;
+    font-size: 18px;
+    background: #eee;
+    border: 3px solid #333;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #333;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .modal-nav button:hover  { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #333; }
+  .modal-nav button:active { transform: translate(2px,2px);   box-shadow: 0px 0px 0 #333; }
+
+  .about-link {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1565c0;
+    text-decoration: underline wavy;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 0;
+  }
+  .about-link:hover { color: #c0392b; }
+
+  .about-body {
+    padding: 24px 26px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #444;
+  }
+  .about-body p + p { margin-top: 14px; }
+
+  footer { text-align: center; font-size: 14px; color: #888; padding-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔓 {{ .Title }} !!</h1><br>
+  <span class="subtitle">{{ .Description }} Based on <a class="ref" href="https://github.com/NoobieDog/TPM-Sniffing">TPM-Sniffing</a></span><br>
+  <button class="about-link" onclick="openAbout()" style="margin-top:12px">ℹ️ About this list</button>
+</div>
+
+<div class="controls">
+  <label style="font-size:14px;font-weight:bold">🔍</label>
+  <input type="search" id="searchInput" placeholder="Search anything…">
+  <span style="font-size:13px;font-weight:bold">Protocol:</span>
+  <button class="fun-btn" data-filter="proto" data-value="SPI">📡 SPI</button>
+  <button class="fun-btn" data-filter="proto" data-value="LPC">🔌 LPC</button>
+  <span style="font-size:13px;font-weight:bold">TPM:</span>
+  <button class="fun-btn" data-filter="tpm" data-value="1.2">v1.2</button>
+  <button class="fun-btn" data-filter="tpm" data-value="2.0">v2.0</button>
+  <span class="counter">👀 <strong id="visibleCount">0</strong> / <strong id="totalCount">0</strong></span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th data-col="make">Make</th>
+        <th data-col="model">Model</th>
+        <th data-col="model_num">Model №</th>
+        <th data-col="tpm">TPM</th>
+        <th data-col="chipset">Chipset</th>
+        <th data-col="protocol">Protocol</th>
+        <th data-col="location">Location</th>
+        <th data-col="debug">Debug Headers</th>
+        <th data-col="url_label">Reference</th>
+        <th>Photo</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- PHOTO MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Device details</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="modal-nav">
+          <button id="modal-prev" title="Previous">←</button>
+          <button id="modal-next" title="Next">→</button>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="modal-photo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutOverlay" onclick="if(event.target===this)closeAbout()">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h3>ℹ️ About this list</h3>
+      <button class="modal-close" onclick="closeAbout()">✕</button>
+    </div>
+    <div class="about-body">
+      <p>This site is based on the amazing repo <a class="ref" href="https://github.com/NoobieDog/TPM-Sniffing">TPM-Sniffing</a> by <a class="ref" href="https://x.com/NoobieDog/">@NoobieDog</a>. Please submit a PR on the repo if you want me to add a new entry on this site.</p>
+      <p><a class="ref" href="https://vmk.lol">vmk.lol</a> is 97% vibe coded, you can find the prompts <a class="ref" href="prompts.txt">here</a> (TW: it may contain spelling errors)</p>
+      <p>Contacts: <a class="ref" href="https://x.com/lowercase_drm/">Twitter</a> / <a class="ref" href="https://mastodon.social/@drm">Mastodon</a> / <a class="ref" href="https://github.com/ThePirateWhoSmellsOfSunflowers/">GitHub</a></p>
+    </div>
+  </div>
+</div>
+
+<footer>97% claude dot ai with a free tier account, 3% <a class="ref" href="https://x.com/lowercase_drm/">@lowercase_drm</a></footer>
+
+<script>
+const data = JSON.parse({{ hugo.Data.tpm.devices | jsonify }});
+
+function protoBadge(v) {
+  return v === 'SPI'
+    ? `<span class="tag tag-spi">SPI</span>`
+    : `<span class="tag tag-lpc">LPC</span>`;
+}
+function tpmBadge(v) {
+  if (v === '1.2')   return `<span class="tag tag-12">v1.2</span>`;
+  if (v === '2.0')   return `<span class="tag tag-20">v2.0</span>`;
+  return `<span class="tag tag-both">${v}</span>`;
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  rows.forEach((r, i) => {
+    const ref = r.url
+      ? `<a class="ref" href="${r.url}" target="_blank" rel="noopener">${r.url_label}</a>`
+      : `<span style="color:#aaa">—</span>`;
+    const photoCell = r.image
+      ? `<a class="photo-link" href="#" onclick="openModal(${data.indexOf(r)});return false;">📷</a>`
+      : `<span class="photo-none">—</span>`;
+    const tr = document.createElement('tr');
+    tr.style.animationDelay = `${Math.min(i, 20) * 18}ms`;
+    tr.innerHTML = `
+      <td class="make-col">${r.make}</td>
+      <td>${r.model}</td>
+      <td style="font-size:13px;color:#555">${r.model_num || '—'}</td>
+      <td>${tpmBadge(r.tpm)}</td>
+      <td class="chip-col">${r.chipset}</td>
+      <td>${protoBadge(r.protocol)}</td>
+      <td class="loc-col">${r.location || '?'}</td>
+      <td class="dbg-col">${r.debug || '?'}</td>
+      <td>${ref}</td>
+      <td>${photoCell}</td>
+    `;
+    tr.dataset.raw   = [r.make, r.model, r.model_num, r.chipset].join(' ').toLowerCase();
+    tr.dataset.proto = r.protocol;
+    tr.dataset.tpm   = r.tpm;
+    tr.dataset.idx   = data.indexOf(r);
+    tbody.appendChild(tr);
+  });
+  document.getElementById('totalCount').textContent   = data.length;
+  document.getElementById('visibleCount').textContent = rows.length;
+}
+
+// ── sort ─────────────────────────────────────────────────────
+let sortCol = null, sortDir = 1, sortedData = [...data];
+
+document.querySelectorAll('thead th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (col === sortCol) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('thead th').forEach(h => h.classList.remove('asc','desc'));
+    th.classList.add(sortDir === 1 ? 'asc' : 'desc');
+    sortedData = [...data].sort((a, b) => (a[col] || '').localeCompare(b[col] || '') * sortDir);
+    renderTable(sortedData);
+    applyFilters();
+  });
+});
+
+// ── filters ───────────────────────────────────────────────────
+let fProto = null, fTpm = null, fSearch = '';
+
+function applyFilters() {
+  let n = 0;
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    const ok =
+      (!fProto  || tr.dataset.proto === fProto) &&
+      (!fTpm    || tr.dataset.tpm.includes(fTpm)) &&
+      (!fSearch || tr.dataset.raw.includes(fSearch));
+    tr.classList.toggle('hidden', !ok);
+    if (ok) n++;
+  });
+  document.getElementById('visibleCount').textContent = n;
+}
+
+document.querySelectorAll('.fun-btn[data-filter="proto"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const v = btn.dataset.value;
+    fProto = fProto === v ? null : v;
+    document.querySelectorAll('.fun-btn[data-filter="proto"]').forEach(b => {
+      b.classList.toggle('active-spi', fProto === 'SPI' && b.dataset.value === 'SPI');
+      b.classList.toggle('active-lpc', fProto === 'LPC' && b.dataset.value === 'LPC');
+    });
+    applyFilters();
+  });
+});
+
+document.querySelectorAll('.fun-btn[data-filter="tpm"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const v = btn.dataset.value;
+    fTpm = fTpm === v ? null : v;
+    document.querySelectorAll('.fun-btn[data-filter="tpm"]').forEach(b => {
+      b.classList.toggle('active-v12', fTpm === '1.2' && b.dataset.value === '1.2');
+      b.classList.toggle('active-v20', fTpm === '2.0' && b.dataset.value === '2.0');
+    });
+    applyFilters();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  fSearch = e.target.value.trim().toLowerCase();
+  applyFilters();
+});
+
+// ── photo modal ───────────────────────────────────────────────
+let currentIdx = -1, visibleIndices = [];
+
+function getVisibleIndices() {
+  return [...document.querySelectorAll('#tableBody tr:not(.hidden)')].map(tr => +tr.dataset.idx);
+}
+
+function openModal(idx) {
+  currentIdx = idx;
+  visibleIndices = getVisibleIndices();
+  const r = data[idx];
+  document.getElementById('modal-title').textContent =
+    `${r.make} ${r.model}${r.model_num ? ' · ' + r.model_num : ''}`;
+  const photoEl = document.getElementById('modal-photo');
+  if (r.image) {
+    photoEl.innerHTML = `<img src="${r.image}" alt="${r.make} ${r.model}" style="width:100%;display:block;">`;
+  } else {
+    photoEl.innerHTML = `
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-label">photo coming soon</div>
+      </div>`;
+  }
+  const pos = visibleIndices.indexOf(idx);
+  document.getElementById('modal-prev').style.opacity = pos <= 0 ? '0.3' : '1';
+  document.getElementById('modal-next').style.opacity = pos >= visibleIndices.length - 1 ? '0.3' : '1';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function navigateModal(dir) {
+  const pos = visibleIndices.indexOf(currentIdx);
+  const next = visibleIndices[pos + dir];
+  if (next !== undefined) openModal(next);
+}
+
+document.getElementById('modal-prev').addEventListener('click', () => navigateModal(-1));
+document.getElementById('modal-next').addEventListener('click', () => navigateModal(1));
+
+// ── about modal ───────────────────────────────────────────────
+function openAbout() {
+  document.getElementById('aboutOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeAbout() {
+  document.getElementById('aboutOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeAbout(); }
+  if (!document.getElementById('modalOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') navigateModal(1);
+  if (e.key === 'ArrowLeft')  navigateModal(-1);
+});
+
+// ── init ─────────────────────────────────────────────────────
+renderTable(data);
+</script>
+</body>
+</html>

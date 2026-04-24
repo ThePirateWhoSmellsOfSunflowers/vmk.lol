@@ -1,0 +1,28 @@
+1. I have this kind of table markdown, can you turning it into a website. (**pasted markdown**)
+2. I don't like the aesthetic, i want a more goofy one (comic sans you know) and a better modularity : i want it to be easy to add a new entry on the website
+3. nice but make each line clickable, when the user click a modal shows more info (you can put lorem ipsum for now)
+4. less info within the modal, only a placeholder for a photo
+5. remove the add new entry function
+
+**free tier cooldown**
+
+6. Nice, is it possible to convert it into a hugo (static site generator) compatible page ?
+7. running "hugo server" returns "ERROR command error: Unable to locate config file or config directory. Perhaps you need to create a new project." fix it
+8. a js error in the console : tpm/:313 Uncaught TypeError: rows.forEach is not a function at renderTable (tpm/:313:8)
+9. still the same error, data is rendered as it in the js (**pasted js extract**)
+10. Problem solved thanks, now remove the "extractable?" column and replace it with  a link to the modale image, the link must be configurable through the json file. a click on the row no longer pop the modale.
+
+**free tier cooldown**
+
+11. can you: 
+    add an "about" link at the top and bottom of the page that open a modal, with lorem ipsum text. 
+    Remove comic sans font from the css 
+    make font little bit bigger
+12. According to hugo output
+    WARN  found no layout file for "html" for kind "home": You should create a template file which matches Hugo Layouts Lookup Rules for this combination.
+    WARN  found no layout file for "html" for kind "taxonomy": You should create a template file which matches Hugo Layouts Lookup Rules for this combination.
+    WARN  deprecated: .Site.Data was deprecated in Hugo v0.156.0 and will be removed in a future release. Use hugo.Data instead.
+    fix those three errors
+13. i don't want '/tpm' in the url, the site must be at the root level
+14. Re chef, can you recap all my prompt verbatim here please
+
