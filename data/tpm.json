@@ -159,6 +159,19 @@
     {
       "make": "Dell",
       "model": "Latitude",
+      "model_num": "7450",
+      "tpm": "2.0",
+      "chipset": "ST33TPHF2XSPI",
+      "protocol": "SPI",
+      "location": "Under Motherboard",
+      "debug": "Via BIOS chip (UC2) WSON8",
+      "url": "https://x.com/lowercase_drm/status/2056674879571632457",
+      "url_label": "@lowercase_drm",
+      "image": "./img/Dell_Latitude_7450.png"
+    },    
+    {
+      "make": "Dell",
+      "model": "Latitude",
       "model_num": "9420",
       "tpm": "2.0",
       "chipset": "ST33TPHF2XSPI",
