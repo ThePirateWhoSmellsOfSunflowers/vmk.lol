@@ -159,6 +159,32 @@
     {
       "make": "Dell",
       "model": "Latitude",
+      "model_num": "5430",
+      "tpm": "2.0",
+      "chipset": "?",
+      "protocol": "SPI",
+      "location": "? (UZ4)",
+      "debug": "Via BIOS chip (UC2) WSON8",
+      "url": "https://x.com/noobiedog/status/2056984042176713191",
+      "url_label": "@noobiedog",
+      "image": "./img/Dell_Latitude_5430.jpeg"
+    },
+    {
+      "make": "Dell",
+      "model": "Latitude",
+      "model_num": "5440",
+      "tpm": "2.0",
+      "chipset": "?",
+      "protocol": "SPI",
+      "location": "? (UZ4)",
+      "debug": "Via BIOS chip (UC2) WSON8",
+      "url": "https://x.com/noobiedog/status/2056984045079138686",
+      "url_label": "@noobiedog",
+      "image": "./img/Dell_Latitude_5440.jpeg"
+    },
+    {
+      "make": "Dell",
+      "model": "Latitude",
       "model_num": "7450",
       "tpm": "2.0",
       "chipset": "ST33TPHF2XSPI",
