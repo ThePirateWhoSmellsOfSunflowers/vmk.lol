@@ -365,6 +365,19 @@
       "image": "./img/HP_ProBook_4_G1.jpg"
     },
     {
+      "make": "HP",
+      "model": "ProBook",
+      "model_num": "440 G5",
+      "tpm": "2.0",
+      "chipset": "?",
+      "protocol": "SPI",
+      "location": "Under Motherboard",
+      "debug": "Via BIOS Chip",
+      "url": "https://x.com/lowercase_drm/status/2061751331539329123",
+      "url_label": "@lowercase_drm",
+      "image": "./img/HP_Probook_440_G5.jpeg"
+    },
+    {
       "make": "Moxa",
       "model": "UC-1222A",
       "model_num": "Secure Edition",
