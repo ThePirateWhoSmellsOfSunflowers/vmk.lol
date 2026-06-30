@@ -340,6 +340,19 @@
     },
     {
       "make": "HP",
+      "model": "EliteBook x360",
+      "model_num": "1030 G8",
+      "tpm": "2.0",
+      "chipset": "?",
+      "protocol": "SPI",
+      "location": "Under Motherboard",
+      "debug": "Via 25Q256JVEN (UC3)",
+      "url": "https://x.com/lowercase_drm/status/2071888536605741218",
+      "url_label": "@lowercase_drm",
+      "image": "img/HP_EliteBook_x360_1030_G8.png"
+    },
+    {
+      "make": "HP",
       "model": "Elite",
       "model_num": "1040 G10",
       "tpm": "2.0",
